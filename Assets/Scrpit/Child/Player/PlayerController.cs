@@ -1,20 +1,20 @@
-using Unity.VisualScripting;
+
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    private CharacterMovement characterMovement;
+    private PlayerStamina playerStamina;
     private Animator animator;
     private Vector2 moveInput;
-    [SerializeField] private float baseMoveSpeed = 5f;
-    [SerializeField] private float sprint = 1.5f; //tốc độ thêm 1.5 lần
-    private float buffBonusSpeed = 0f;
     private bool isSprinting = false;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        characterMovement = GetComponent<CharacterMovement>();
+        playerStamina = GetComponent<PlayerStamina>();
         animator = GetComponent<Animator>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -31,7 +31,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        PlayerSpeed();
+        HandleStamina();
+        characterMovement.Move(moveInput, isSprinting);
     }
 
     private void OnMove(InputValue inputValue)
@@ -46,8 +47,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            animator.SetBool("isWalking", !isSprinting);
-            animator.SetBool("isRunning", isSprinting);
+            UpdateAnimatorState(isSprinting);
         }
         moveInput = checkInput;
         animator.SetFloat("InputX", moveInput.x);
@@ -59,23 +59,42 @@ public class PlayerController : MonoBehaviour
         if (inputValue.isPressed)
         {
             isSprinting = !isSprinting;
+            //isSprinting = inputValue.isPressed;
             if (moveInput != Vector2.zero)
             {
-                animator.SetBool("isWalking", !isSprinting);
-                animator.SetBool("isRunning", isSprinting);
+                UpdateAnimatorState(isSprinting);
             }
 
         }
 
     }
 
-    private void PlayerSpeed()
+    private void UpdateAnimatorState(bool isRunning)
     {
-        float currentSpeed = baseMoveSpeed + buffBonusSpeed;
-        if (isSprinting)
+        animator.SetBool("isWalking", !isRunning);
+        animator.SetBool("isRunning", isRunning);
+    }
+
+    private void HandleStamina()
+    {
+        if (isSprinting && moveInput != Vector2.zero)
         {
-            currentSpeed *= sprint;
+            float staminaRequired = playerStamina.Lost * Time.fixedDeltaTime;
+
+            if (playerStamina.HasEnoughStamina(staminaRequired))
+            {
+                playerStamina.UseStamina(staminaRequired);
+            }
+            else
+            {
+                isSprinting = false;
+                UpdateAnimatorState(false);
+            }
         }
-        rb.linearVelocity = new Vector2(moveInput.x * currentSpeed, moveInput.y * currentSpeed);
+        else
+        {
+            playerStamina.RegenStamina(playerStamina.Regen * Time.fixedDeltaTime);
+        }
+
     }
 }
