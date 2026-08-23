@@ -4,3 +4,4 @@ public interface IDameable
 {
     void TakeDamage(float dameAmount);
 }
+

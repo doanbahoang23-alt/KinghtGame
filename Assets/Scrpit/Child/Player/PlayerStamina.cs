@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public class PlayerStamina : BaseStamina
     [SerializeField] private Image staminaBarFill;
     [SerializeField] private float lostStamina = 30f;
     [SerializeField] private float regenStamina = 15f;
+    [SerializeField] private TextMeshProUGUI staminaText;
 
     public float Lost { get { return lostStamina; } }
     public float Regen { get { return regenStamina; } }
@@ -33,6 +35,10 @@ public class PlayerStamina : BaseStamina
         if (staminaBarFill != null)
         {
             staminaBarFill.fillAmount = currentStamina / maxStamina;
+        }
+        if (staminaText != null)
+        {
+            staminaText.text = $"{Mathf.RoundToInt(currentStamina)} / {maxStamina}";
         }
     }
 

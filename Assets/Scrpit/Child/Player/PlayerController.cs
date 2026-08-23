@@ -5,17 +5,21 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private CharacterMovement characterMovement;
+    private Rigidbody2D rb;
     private PlayerStamina playerStamina;
     private Animator animator;
     private Vector2 moveInput;
     private bool isSprinting = false;
+    private PlayerSpeed playerSpeed;
+    private PlayerAttackDamage playerAttackDamage;
 
     void Awake()
     {
-        characterMovement = GetComponent<CharacterMovement>();
+        rb = GetComponent<Rigidbody2D>();
         playerStamina = GetComponent<PlayerStamina>();
         animator = GetComponent<Animator>();
+        playerSpeed = GetComponent<PlayerSpeed>();
+        playerAttackDamage = GetComponent<PlayerAttackDamage>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,36 +27,30 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void FixedUpdate()
     {
         HandleStamina();
-        characterMovement.Move(moveInput, isSprinting);
+        HandleSpeed();
     }
 
     private void OnMove(InputValue inputValue)
     {
-        Vector2 checkInput = inputValue.Get<Vector2>();
-        if (checkInput == Vector2.zero)
+        moveInput = inputValue.Get<Vector2>();
+        if (moveInput == Vector2.zero)
         {
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
-            animator.SetFloat("LastInputX", moveInput.x);
-            animator.SetFloat("LastInputY", moveInput.y);
         }
         else
         {
             UpdateAnimatorState(isSprinting);
+            animator.SetFloat("InputX", moveInput.x);
+            animator.SetFloat("InputY", moveInput.y);
+            animator.SetFloat("LastInputX", moveInput.x);
+            animator.SetFloat("LastInputY", moveInput.y);
         }
-        moveInput = checkInput;
-        animator.SetFloat("InputX", moveInput.x);
-        animator.SetFloat("InputY", moveInput.y);
     }
+
 
     private void OnSprint(InputValue inputValue)
     {
@@ -73,6 +71,12 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetBool("isWalking", !isRunning);
         animator.SetBool("isRunning", isRunning);
+    }
+
+    private void HandleSpeed()
+    {
+        float speedFinal = playerSpeed.MoveSpeed(isSprinting);
+        rb.linearVelocity = moveInput.normalized * speedFinal;
     }
 
     private void HandleStamina()
@@ -97,4 +101,13 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    private void OnAttack(InputValue inputValue)
+    {
+        if (inputValue.isPressed)
+        {
+            animator.SetTrigger("Attack");
+        }
+    }
+
 }

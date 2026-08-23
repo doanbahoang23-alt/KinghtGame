@@ -41,11 +41,41 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: floor
+  - name: floorLayer1
     uniqueID: 2851506645
     locked: 0
-  - name: wall
+  - name: floorLayer2
+    uniqueID: 3100770927
+    locked: 0
+  - name: FloorLayer3
+    uniqueID: 715447565
+    locked: 0
+  - name: FloorLayer4
+    uniqueID: 896269691
+    locked: 0
+  - name: WallLayer1
     uniqueID: 3359762033
+    locked: 0
+  - name: WallLayer2
+    uniqueID: 3735767577
+    locked: 0
+  - name: TreeLayer1
+    uniqueID: 3458985319
+    locked: 0
+  - name: TreeLayer2
+    uniqueID: 911852425
+    locked: 0
+  - name: TreeLayer3
+    uniqueID: 862929279
+    locked: 0
+  - name: TreeLayer4
+    uniqueID: 1877782465
+    locked: 0
+  - name: Cover
+    uniqueID: 1902859497
+    locked: 0
+  - name: Cover2
+    uniqueID: 1697984123
     locked: 0
   - name: player
     uniqueID: 5009159
