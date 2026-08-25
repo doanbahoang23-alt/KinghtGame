@@ -1,5 +1,4 @@
 
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,12 +6,16 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
     private PlayerStamina playerStamina;
-    private Animator animator;
-    private Vector2 moveInput;
-    private bool isSprinting = false;
     private PlayerSpeed playerSpeed;
     private PlayerAttackDamage playerAttackDamage;
+    private PlayerHealth playerHealth;
 
+    [SerializeField] private float knockbackTime = 0.2f;
+    private float knockbackCounter;
+    private bool isSprinting = false;
+
+    private Animator animator;
+    private Vector2 moveInput;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -20,6 +23,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         playerSpeed = GetComponent<PlayerSpeed>();
         playerAttackDamage = GetComponent<PlayerAttackDamage>();
+        playerHealth = GetComponent<PlayerHealth>();
+
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,6 +34,11 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (knockbackCounter > 0)
+        {
+            knockbackCounter -= Time.fixedDeltaTime;
+            return;
+        }
         HandleStamina();
         HandleSpeed();
     }
@@ -36,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private void OnMove(InputValue inputValue)
     {
         moveInput = inputValue.Get<Vector2>();
+        Flip();
         if (moveInput == Vector2.zero)
         {
             animator.SetBool("isWalking", false);
@@ -73,9 +84,22 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", isRunning);
     }
 
+    private void Flip()
+    {
+        if (moveInput.x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (moveInput.x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+    }
+
     private void HandleSpeed()
     {
         float speedFinal = playerSpeed.MoveSpeed(isSprinting);
+        Debug.Log($"Vector Phím: {moveInput} | Tốc độ: {speedFinal}");
         rb.linearVelocity = moveInput.normalized * speedFinal;
     }
 
@@ -108,6 +132,12 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("Attack");
         }
+    }
+
+    public void TakeKnockback(Vector2 force)
+    {
+        knockbackCounter = knockbackTime;
+        rb.linearVelocity = force;
     }
 
 }

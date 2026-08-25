@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
     private EnemyHealth enemyHealth;
     private EnemyAttackDamage enemyAttackDamage;
     EnemyVision enemyVision;
+    private float pauseTimer;
 
     void Awake()
     {
@@ -34,6 +35,11 @@ public class EnemyController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (pauseTimer > 0)
+        {
+            pauseTimer -= Time.fixedDeltaTime;
+            return;
+        }
         FindPlayerToChase();
     }
 
@@ -66,6 +72,12 @@ public class EnemyController : MonoBehaviour
                 transform.localScale = new Vector3(-0.5f, 0.5f, 1f);
             }
         }
+    }
+
+    public void PauseMovement(float time)
+    {
+        pauseTimer = time;
+        rb.linearVelocity = Vector2.zero; // Thắng gấp (Phanh lại)
     }
 
 }

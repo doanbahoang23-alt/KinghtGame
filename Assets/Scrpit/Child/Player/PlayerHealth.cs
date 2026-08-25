@@ -7,7 +7,6 @@ public class PlayerHealth : BaseHealth
 {
     [SerializeField] private Image healthBarFill;
     [SerializeField] private TextMeshProUGUI healthText;
-
     protected override void Start()
     {
         base.Start();
@@ -48,4 +47,5 @@ public class PlayerHealth : BaseHealth
             healthText.text = $"{Mathf.RoundToInt(currentHealth)} / {maxHealth}";
         }
     }
+
 }
