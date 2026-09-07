@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SpawnPoint
   - Enemy
+  - Trap
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - floor
   - wall
   - player
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -78,6 +79,9 @@ TagManager:
     locked: 0
   - name: Cover2
     uniqueID: 1697984123
+    locked: 0
+  - name: Trap
+    uniqueID: 2170748661
     locked: 0
   - name: player
     uniqueID: 5009159
