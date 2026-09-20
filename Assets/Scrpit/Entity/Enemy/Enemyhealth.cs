@@ -7,4 +7,10 @@ public class EnemyHealth : BaseHealth
         base.Start();
     }
 
+    protected override void Die()
+    {
+        base.Die();
+        Destroy(gameObject);
+    }
+
 }

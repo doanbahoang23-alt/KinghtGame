@@ -9,8 +9,10 @@ public class PlayerController : MonoBehaviour
     private PlayerSpeed playerSpeed;
 
     private KnockbackReceiver knockbackReceiver;
+    private PlayerHealth playerHealth;
 
     private bool isSprinting = false;
+    private bool isAttacking = false;
 
     private Animator animator;
     private Vector2 moveInput;
@@ -22,9 +24,15 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         playerSpeed = GetComponent<PlayerSpeed>();
         knockbackReceiver = GetComponent<KnockbackReceiver>();
+        playerHealth = GetComponent<PlayerHealth>();
     }
     void FixedUpdate()
     {
+        if (playerHealth != null && playerHealth.isDeath)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
         if (knockbackReceiver != null && knockbackReceiver.IsKnockback) return;
 
         SetAnimatorMove();
@@ -41,7 +49,11 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = rawMoveInput;
 
-        Flip();
+        if (!isAttacking)
+        {
+            Flip();
+        }
+
         if (moveInput == Vector2.zero)
         {
             animator.SetBool("isWalking", false);
@@ -52,8 +64,12 @@ public class PlayerController : MonoBehaviour
             UpdateAnimatorState(isSprinting);
             animator.SetFloat("InputX", moveInput.x);
             animator.SetFloat("InputY", moveInput.y);
-            animator.SetFloat("LastInputX", moveInput.x);
-            animator.SetFloat("LastInputY", moveInput.y);
+            if (!isAttacking)
+            {
+                animator.SetFloat("LastInputX", Mathf.RoundToInt(moveInput.normalized.x));
+                animator.SetFloat("LastInputY", Mathf.RoundToInt(moveInput.normalized.y));
+            }
+
         }
 
 
@@ -130,18 +146,17 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttack(InputValue inputValue)
     {
-        if (inputValue.isPressed)
+        if (playerHealth != null && playerHealth.isDeath) return;
+        if (inputValue.isPressed && !isAttacking)
         {
             animator.SetTrigger("Attack");
+            isAttacking = true;
         }
     }
 
-    private void OnAttack2(InputValue inputValue)
+    public void ResetAttackState()
     {
-        if (inputValue.isPressed)
-        {
-            animator.SetTrigger("AxeAttack");
-        }
+        isAttacking = false;
     }
 
 

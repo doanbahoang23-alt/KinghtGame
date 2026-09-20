@@ -3,18 +3,23 @@ using UnityEngine;
 
 public class BaseDamage : MonoBehaviour
 {
-    [SerializeField] protected float baseDamage = 5f;
+    [SerializeField] protected float currentBaseDamage = 5f;
     protected float buffDamage = 0f;
 
-    [SerializeField] protected float knockbackForce = 15f;
+    [SerializeField] protected float currentKnockbackForce = 15f;
     [SerializeField] protected string targetTag = "Enemy";
 
     public string TargetTag => targetTag;
-    public float KnockbackForce => knockbackForce;
+    public float KnockbackForce => currentKnockbackForce;
 
+    public virtual void SetWeaponStats(float weaponDamage, float knockback)
+    {
+        currentBaseDamage = weaponDamage;
+        currentKnockbackForce = knockback;
+    }
     public virtual float AttackDamage()
     {
-        float currentDamage = baseDamage + buffDamage;
+        float currentDamage = currentBaseDamage + buffDamage;
         return currentDamage;
     }
 
@@ -29,7 +34,7 @@ public class BaseDamage : MonoBehaviour
         if (collision.TryGetComponent(out IKnockbackable knockbackable))
         {
             Vector2 knockbackDir = (collision.transform.position - transform.position).normalized;
-            knockbackable.ApplyKnockback(knockbackDir, knockbackForce);
+            knockbackable.ApplyKnockback(knockbackDir, currentKnockbackForce);
         }
     }
 }

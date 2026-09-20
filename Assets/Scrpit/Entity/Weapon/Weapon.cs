@@ -6,4 +6,9 @@ public class Weapon : BaseDamage
     {
         HandleCollision(collision);
     }
+
+    public override void SetWeaponStats(float weaponDamage, float knockback)
+    {
+        base.SetWeaponStats(weaponDamage, knockback);
+    }
 }

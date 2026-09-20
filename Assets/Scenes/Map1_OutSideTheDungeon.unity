@@ -25623,24 +25623,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &468441936 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 696402281938428791, guid: 058b53dd755495045aa96c6efc40f28c, type: 3}
-  m_PrefabInstance: {fileID: 6286222262147230589}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &468441947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 468441936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a2a0ea52e99e2c4395aa2e29ae89d3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KnockbackReceiver
-  knockbackTime: 0.2
 --- !u!1 &601406850
 GameObject:
   m_ObjectHideFlags: 0
@@ -25883,7 +25865,7 @@ GameObject:
   - component: {fileID: 726432481}
   m_Layer: 0
   m_Name: WallLayer2
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28153,7 +28135,7 @@ GameObject:
   - component: {fileID: 1201779348}
   m_Layer: 0
   m_Name: TreeLayer3
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28348,7 +28330,7 @@ GameObject:
   - component: {fileID: 1304261293}
   m_Layer: 0
   m_Name: TreeLayer1
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28879,7 +28861,7 @@ GameObject:
   - component: {fileID: 1578586821}
   m_Layer: 0
   m_Name: TreeLayer2
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29143,7 +29125,7 @@ GameObject:
   - component: {fileID: 1639147530}
   m_Layer: 0
   m_Name: WallLayer1
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51773,7 +51755,7 @@ GameObject:
   - component: {fileID: 1868639943}
   m_Layer: 0
   m_Name: TreeLayer4
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56343,14 +56325,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 291574210844377729, guid: 058b53dd755495045aa96c6efc40f28c, type: 3}
-      propertyPath: targetTag
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 405679639465744726, guid: 058b53dd755495045aa96c6efc40f28c, type: 3}
-      propertyPath: m_SleepingMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 696402281938428791, guid: 058b53dd755495045aa96c6efc40f28c, type: 3}
       propertyPath: m_Name
       value: BaseOrc
@@ -56398,10 +56372,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 696402281938428791, guid: 058b53dd755495045aa96c6efc40f28c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 468441947}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 058b53dd755495045aa96c6efc40f28c, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

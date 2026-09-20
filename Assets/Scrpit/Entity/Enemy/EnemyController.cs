@@ -14,6 +14,15 @@ public class EnemyController : MonoBehaviour
     private float attackTimer = 0f;
     private bool isTouchingTarget = false;
 
+    [SerializeField] private float roamSpeedMultiplier = 0.5f;
+    [SerializeField] private float minWaitTime = 1f;
+    [SerializeField] private float maxWaitTime = 3f;
+    [SerializeField] private float minRoamTime = 1f;
+    [SerializeField] private float maxRoamTime = 2.5f;
+
+    private float roamTimer;
+    private bool isWaiting = true;
+    private Vector2 roamDirection;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,14 +36,19 @@ public class EnemyController : MonoBehaviour
     void FixedUpdate()
     {
         if (knockbackReceiver != null && knockbackReceiver.IsKnockback) return;
+        if (pauseTimer > 0)
+        {
+            pauseTimer -= Time.fixedDeltaTime;
+            return;
+        }
         if (attackTimer > 0)
         {
             attackTimer -= Time.fixedDeltaTime;
         }
-        FindPlayerToChase();
+        HandleMovementAttack();
     }
 
-    private void FindPlayerToChase()
+    private void HandleMovementAttack()
     {
         if (isTouchingTarget)
         {
@@ -44,14 +58,42 @@ public class EnemyController : MonoBehaviour
         }
         if (enemyVision.HasTarget)
         {
+            isWaiting = true;
             Vector2 move = enemyVision.DirectionToTarget;
             rb.linearVelocity = move * enemySpeed.MoveSpeed(false);
             HandleAnimation(move, true);
         }
         else
         {
+            HandleRoanming();
+        }
+    }
+
+    private void HandleRoanming()
+    {
+        roamTimer -= Time.fixedDeltaTime;
+        if (roamTimer <= 0)
+        {
+            isWaiting = !isWaiting;
+            if (isWaiting)
+            {
+                roamTimer = Random.Range(minWaitTime, maxWaitTime);
+            }
+            else
+            {
+                roamTimer = Random.Range(minRoamTime, maxRoamTime);
+                roamDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+            }
+        }
+        if (isWaiting)
+        {
             rb.linearVelocity = Vector2.zero;
             HandleAnimation(Vector2.zero, false);
+        }
+        else
+        {
+            rb.linearVelocity = roamDirection * (enemySpeed.MoveSpeed(false) * roamSpeedMultiplier);
+            HandleAnimation(roamDirection, true);
         }
     }
 

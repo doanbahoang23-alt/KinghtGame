@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using System;
 
 public class BaseHealth : MonoBehaviour, IDamageable
 {
@@ -9,6 +10,10 @@ public class BaseHealth : MonoBehaviour, IDamageable
 
     protected float currentHealth;
     private float lastTimeCombat;
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
+    public bool IsDead { get; protected set; }
+    public event Action<GameObject> OnDeath;
 
     protected virtual void Start()
     {
@@ -23,6 +28,7 @@ public class BaseHealth : MonoBehaviour, IDamageable
 
     public virtual void TakeDamage(float damageAmount)
     {
+        if (IsDead) return;
         currentHealth -= damageAmount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         RestartCombatTime();
@@ -39,7 +45,9 @@ public class BaseHealth : MonoBehaviour, IDamageable
 
     protected virtual void Die()
     {
-        Destroy(gameObject);
+        if (IsDead) return;
+        IsDead = true;
+        OnDeath?.Invoke(gameObject);
     }
 
     public virtual void RegentHealth(float amount)
@@ -57,7 +65,8 @@ public class BaseHealth : MonoBehaviour, IDamageable
 
     private void HandleHealthRegen()
     {
-        if (currentHealth < maxHealth && Time.time >= lastTimeCombat + timeOutCombat)
+        if (IsDead || currentHealth >= maxHealth) return;
+        if (Time.time >= lastTimeCombat + timeOutCombat)
         {
             RegentHealth(healthRegen * Time.deltaTime);
         }

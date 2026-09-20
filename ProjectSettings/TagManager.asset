@@ -7,6 +7,7 @@ TagManager:
   - SpawnPoint
   - Enemy
   - Trap
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -83,7 +84,10 @@ TagManager:
   - name: Trap
     uniqueID: 2170748661
     locked: 0
-  - name: player
+  - name: Spawn
+    uniqueID: 1846573341
+    locked: 0
+  - name: playerObject
     uniqueID: 5009159
     locked: 0
   - name: Enemy
